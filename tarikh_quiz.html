@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحدي التواريخ التاريخية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0f1e; --surface:#111827; --surface2:#1a2236; --border:#1e2d47;
+    --accent:#3b82f6; --accent2:#6366f1; --gold:#f59e0b;
+    --green:#10b981; --red:#ef4444; --text:#f1f5f9; --muted:#64748b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(59,130,246,.08),transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(99,102,241,.07),transparent 60%);pointer-events:none;z-index:0;}
+  .app{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:16px;}
+  header{text-align:center;padding:32px 16px 24px;}
+  .badge{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;padding:4px 14px;border-radius:100px;margin-bottom:14px;text-transform:uppercase;}
+  header h1{font-size:clamp(22px,5vw,36px);font-weight:900;background:linear-gradient(135deg,#f1f5f9 30%,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+  header p{color:var(--muted);font-size:14px;}
+  .tabs{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:4px;margin-bottom:24px;gap:4px;}
+  .tab-btn{flex:1;padding:12px;border:none;background:transparent;color:var(--muted);font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;border-radius:12px;cursor:pointer;transition:all .25s;}
+  .tab-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 20px rgba(59,130,246,.35);}
+  .search-wrap{position:relative;margin-bottom:20px;}
+  .search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 20px 14px 48px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:15px;outline:none;transition:border-color .2s;}
+  .search-wrap input::placeholder{color:var(--muted);}
+  .search-wrap input:focus{border-color:var(--accent);}
+  .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:18px;}
+  .study-grid{display:grid;gap:10px;}
+  .study-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:all .2s;position:relative;overflow:hidden;}
+  .study-card::before{content:'';position:absolute;right:0;top:0;bottom:0;width:4px;}
+  .study-card.u1::before{background:var(--accent);}
+  .study-card.u2::before{background:var(--green);}
+  .study-card.u3::before{background:var(--gold);}
+  .study-card:hover{transform:translateY(-2px);border-color:#2a3a55;}
+  .card-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+  .u1 .card-label{color:var(--accent);}
+  .u2 .card-label{color:var(--green);}
+  .u3 .card-label{color:var(--gold);}
+  .card-event{font-size:15px;font-weight:700;}
+  .card-date{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;color:var(--accent);white-space:nowrap;flex-shrink:0;}
+  .setup-title{text-align:center;font-size:20px;font-weight:800;margin-bottom:24px;}
+  .unit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .unit-btn{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 16px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .25s;text-align:center;line-height:1.5;}
+  .unit-btn .icon{font-size:28px;display:block;margin-bottom:8px;}
+  .unit-btn small{font-weight:400;color:var(--muted);}
+  .unit-btn.u1:hover{background:rgba(59,130,246,.1);border-color:var(--accent);}
+  .unit-btn.u2:hover{background:rgba(16,185,129,.1);border-color:var(--green);}
+  .unit-btn.u3:hover{background:rgba(245,158,11,.1);border-color:var(--gold);}
+  .unit-btn.all{grid-column:1/-1;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;font-size:16px;padding:20px;box-shadow:0 8px 30px rgba(59,130,246,.3);}
+  .unit-btn.all:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(59,130,246,.45);}
+  .quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:12px;}
+  .progress-wrap{flex:1;}
+  .progress-text{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;}
+  .progress-bar{height:6px;background:var(--surface2);border-radius:100px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+  .score-badge{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 16px;font-size:14px;font-weight:800;color:var(--gold);white-space:nowrap;}
+  .question-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
+  .question-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+  .q-label{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;display:block;}
+  .q-text{font-size:clamp(18px,4vw,24px);font-weight:900;line-height:1.4;display:block;}
+  .motivation{font-size:13px;font-weight:700;color:var(--gold);min-height:20px;margin-top:10px;display:block;}
+  .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .opt-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:18px 12px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;}
+  .opt-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(59,130,246,.08);transform:translateY(-2px);}
+  .opt-btn.correct{background:rgba(16,185,129,.15)!important;border-color:var(--green)!important;color:var(--green)!important;}
+  .opt-btn.wrong{background:rgba(239,68,68,.1)!important;border-color:var(--red)!important;color:var(--red)!important;}
+  .feedback-box{border-radius:14px;padding:14px 20px;text-align:center;font-size:15px;font-weight:700;margin-bottom:16px;}
+  .fb-ok{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:var(--green);}
+  .fb-no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red);}
+  .next-btn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:14px;padding:16px;color:#fff;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 6px 24px rgba(59,130,246,.3);}
+  .next-btn:hover{transform:translateY(-2px);}
+  .result-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:40px 24px;text-align:center;}
+  .result-icon{font-size:72px;margin-bottom:16px;display:block;}
+  .result-title{font-size:28px;font-weight:900;margin-bottom:8px;}
+  .result-score{font-size:52px;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;margin:12px 0;}
+  .result-msg{color:var(--muted);font-size:15px;line-height:1.6;max-width:400px;margin:0 auto 28px;}
+  .retry-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:14px;padding:16px 40px;color:#fff;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 8px 30px rgba(59,130,246,.35);transition:all .2s;}
+  .retry-btn:hover{transform:translateY(-2px);}
+  .confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:9999;animation:fall 2.5s ease-in forwards;}
+  @keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+  .hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="badge">بكالوريا التاريخ</div>
+    <h1>تحدي التواريخ التاريخية</h1>
+    <p>طريقك نحو النجاح يبدأ بحفظ ذكي وتحدي مستمر</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('study')">📖 المراجعة الذكية</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">⚡ التحدي التفاعلي</button>
+  </div>
+
+  <div id="studySection">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="ابحث عن حدث أو تاريخ..." oninput="filterStudy(this.value)">
+    </div>
+    <div class="study-grid" id="studyGrid"></div>
+  </div>
+
+  <div id="quizSection" class="hidden">
+    <div id="quizSetup">
+      <p class="setup-title">اختر وحدة للتحدي</p>
+      <div class="unit-grid">
+        <button class="unit-btn u1" onclick="startQuiz('unit1')"><span class="icon">🌍</span>الوحدة 1<br><small>الثنائية القطبية</small></button>
+        <button class="unit-btn u2" onclick="startQuiz('unit2')"><span class="icon">⭐</span>الوحدة 2<br><small>الثورة الجزائرية</small></button>
+        <button class="unit-btn u3" onclick="startQuiz('unit3')"><span class="icon">🕊️</span>الوحدة 3<br><small>قضايا التحرر</small></button>
+        <button class="unit-btn all" onclick="startQuiz('all')">🔥 تحدي جميع الوحدات</button>
+      </div>
+    </div>
+
+    <div id="quizPlay" class="hidden">
+      <div class="quiz-header">
+        <div class="progress-wrap">
+          <div class="progress-text"><span id="qCounter"></span><span id="qPct"></span></div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+        <div class="score-badge">⭐ <span id="scoreVal">0</span></div>
+      </div>
+      <div class="question-card">
+        <span class="q-label">ما هو تاريخ هذا الحدث؟</span>
+        <span class="q-text" id="questionText"></span>
+        <span class="motivation" id="motivation"></span>
+      </div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div id="feedbackBox" class="hidden"></div>
+      <button class="next-btn hidden" id="nextBtn" onclick="nextQuestion()">السؤال التالي ➔</button>
+    </div>
+
+    <div id="quizResult" class="hidden">
+      <div class="result-card">
+        <span class="result-icon" id="resultIcon"></span>
+        <p class="result-title">النتيجة النهائية</p>
+        <span class="result-score" id="resultScore"></span>
+        <p class="result-msg" id="resultMsg"></p>
+        <button class="retry-btn" onclick="resetQuiz()">🔄 تحدي جديد</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const events = [
+  {date:"14 أوت 1941",event:"إعلان ميثاق الأطلسي",unit:"unit1"},
+  {date:"08 ماي 1945",event:"نهاية الحرب العالمية الثانية",unit:"unit1"},
+  {date:"04 فيفري 1945",event:"مؤتمر يالطا",unit:"unit1"},
+  {date:"24 أكتوبر 1945",event:"تأسيس هيئة الأمم المتحدة",unit:"unit1"},
+  {date:"12 مارس 1947",event:"مبدأ ترومان",unit:"unit1"},
+  {date:"05 جوان 1947",event:"مشروع مارشال",unit:"unit1"},
+  {date:"05 أكتوبر 1947",event:"تأسيس مكتب الكومنفورم",unit:"unit1"},
+  {date:"04 أفريل 1949",event:"تأسيس حلف الناتو",unit:"unit1"},
+  {date:"14 ماي 1955",event:"تأسيس حلف وارسو",unit:"unit1"},
+  {date:"13 أوت 1961",event:"بناء جدار برلين",unit:"unit1"},
+  {date:"09 نوفمبر 1989",event:"سقوط جدار برلين",unit:"unit1"},
+  {date:"03 أكتوبر 1990",event:"توحيد ألمانيا",unit:"unit1"},
+  {date:"08 ماي 1945",event:"مجازر سطيف وقالمة وخراطة",unit:"unit2"},
+  {date:"15 فيفري 1947",event:"تأسيس المنظمة الخاصة (OS)",unit:"unit2"},
+  {date:"01 نوفمبر 1954",event:"اندلاع الثورة التحريرية",unit:"unit2"},
+  {date:"20 أوت 1955",event:"هجومات الشمال القسنطيني",unit:"unit2"},
+  {date:"20 أوت 1956",event:"مؤتمر الصومام",unit:"unit2"},
+  {date:"19 سبتمبر 1958",event:"تأسيس الحكومة المؤقتة",unit:"unit2"},
+  {date:"11 ديسمبر 1960",event:"مظاهرات شعبية تاريخية",unit:"unit2"},
+  {date:"17 أكتوبر 1961",event:"مظاهرات المهاجرين في باريس",unit:"unit2"},
+  {date:"19 مارس 1962",event:"عيد النصر (وقف إطلاق النار)",unit:"unit2"},
+  {date:"05 جويلية 1962",event:"استقلال الجزائر",unit:"unit2"},
+  {date:"22 مارس 1945",event:"تأسيس الجامعة العربية",unit:"unit3"},
+  {date:"29 نوفمبر 1947",event:"قرار تقسيم فلسطين رقم 181",unit:"unit3"},
+  {date:"24 أفريل 1955",event:"مؤتمر باندونغ",unit:"unit3"},
+  {date:"05 جوان 1967",event:"حرب الستة أيام (النكسة)",unit:"unit3"},
+  {date:"06 أكتوبر 1973",event:"حرب أكتوبر العربية الإسرائيلية",unit:"unit3"},
+  {date:"08 ديسمبر 1987",event:"اندلاع الانتفاضة الفلسطينية الأولى",unit:"unit3"}
+];
+
+const unitNames={unit1:"وحدة 1",unit2:"وحدة 2",unit3:"وحدة 3"};
+const unitClass={unit1:"u1",unit2:"u2",unit3:"u3"};
+const praises=["أحسنت يا بطل! 🌟","إجابة نموذجية! 🚀","ذاكرة حديدية! 🧠","طريقك نحو الـ 20/20! 💎","عبقري التاريخ! ✨","مذهل! 💥"];
+let questions=[],idx=0,score=0;
+
+function renderStudy(list){
+  document.getElementById('studyGrid').innerHTML=list.map(e=>`
+    <div class="study-card ${unitClass[e.unit]}">
+      <div><div class="card-label">${unitNames[e.unit]}</div><div class="card-event">${e.event}</div></div>
+      <div class="card-date">${e.date}</div>
+    </div>`).join('');
+}
+function filterStudy(v){renderStudy(events.filter(e=>e.event.includes(v)||e.date.includes(v)));}
+
+function switchTab(t){
+  document.getElementById('studySection').classList.toggle('hidden',t!=='study');
+  document.getElementById('quizSection').classList.toggle('hidden',t!=='quiz');
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&t==='study')||(i===1&&t==='quiz')));
+  if(t==='quiz')resetQuiz();
+}
+
+function startQuiz(unit){
+  let pool=unit==='all'?[...events]:events.filter(e=>e.unit===unit);
+  questions=pool.sort(()=>Math.random()-.5).slice(0,10);
+  idx=0;score=0;
+  document.getElementById('quizSetup').classList.add('hidden');
+  document.getElementById('quizPlay').classList.remove('hidden');
+  document.getElementById('quizResult').classList.add('hidden');
+  showQuestion();
+}
+
+function showQuestion(){
+  const q=questions[idx];
+  const pct=Math.round((idx/questions.length)*100);
+  document.getElementById('qCounter').textContent=`السؤال ${idx+1} / ${questions.length}`;
+  document.getElementById('qPct').textContent=pct+'%';
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('scoreVal').textContent=score*10;
+  document.getElementById('questionText').textContent=q.event;
+  document.getElementById('motivation').textContent='';
+  const fb=document.getElementById('feedbackBox');
+  fb.className='hidden';fb.textContent='';
+  document.getElementById('nextBtn').classList.add('hidden');
+  let opts=[q.date];
+  while(opts.length<4){const r=events[Math.floor(Math.random()*events.length)].date;if(!opts.includes(r))opts.push(r);}
+  opts.sort(()=>Math.random()-.5);
+  document.getElementById('optionsGrid').innerHTML=opts.map(o=>`<button class="opt-btn" onclick="checkAnswer(this,'${o}','${q.date.replace(/'/g,"\\'")}','${q.date.replace(/'/g,"\\'")}')">${o}</button>`).join('');
+}
+
+function checkAnswer(btn,selected,correct){
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('feedbackBox');
+  fb.classList.remove('hidden');
+  if(selected===correct){
+    btn.classList.add('correct');score++;
+    fb.className='feedback-box fb-ok';fb.textContent='✅ إجابة صحيحة! رائع';
+    document.getElementById('motivation').textContent=praises[Math.floor(Math.random()*praises.length)];
+    confetti();
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.opt-btn').forEach(b=>{if(b.textContent.trim()===correct)b.classList.add('correct');});
+    fb.className='feedback-box fb-no';fb.textContent=`❌ التاريخ الصحيح هو: ${correct}`;
+  }
+  document.getElementById('nextBtn').classList.remove('hidden');
+}
+
+function nextQuestion(){idx++;if(idx<questions.length)showQuestion();else showResult();}
+
+function showResult(){
+  document.getElementById('quizPlay').classList.add('hidden');
+  document.getElementById('quizResult').classList.remove('hidden');
+  const pct=(score/questions.length)*100;
+  const icons=['💪','📚','🌟','👑'];
+  const msgs=['لا بأس، راجع الأخطاء وأعد التحدي!','جيد! القليل من التركيز وستتحسن أكثر.','ممتاز جداً! أنت على الطريق الصحيح.','أنت ملك التواريخ! البكالوريا في جيبك.'];
+  const i=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  document.getElementById('resultIcon').textContent=icons[i];
+  document.getElementById('resultScore').textContent=`${score*10} / 100`;
+  document.getElementById('resultMsg').textContent=msgs[i];
+}
+
+function resetQuiz(){
+  document.getElementById('quizSetup').classList.remove('hidden');
+  document.getElementById('quizPlay').classList.add('hidden');
+  document.getElementById('quizResult').classList.add('hidden');
+}
+
+function confetti(){
+  const colors=['#3b82f6','#6366f1','#f59e0b','#10b981','#f472b6'];
+  for(let i=0;i<25;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${colors[i%colors.length]};animation-delay:${Math.random()*.5}s;`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3000);
+  }
+}
+
+renderStudy(events);
+</script>
+</body>
+</html>
